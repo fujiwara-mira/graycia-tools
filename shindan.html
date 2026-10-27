@@ -2003,41 +2003,30 @@ function calcScores() {
   return scores;
 }
 
+// おすすめは「ご予算に収まるメニューのうち、施工価格がいちばん高いもの」にする。
+// 2026-10-28 藤原さんの方針「予算の範囲内でなるべく高いコーティングを出したい」に合わせて変更。
+// 旧: 気になること（Q3）の点数＋予算内なら加点で決めていたため、予算〜20万円でもEXとダイヤⅡが同点になり、
+//     並び順が前のダイヤⅡが出ていた（全1,302通り中666通りで、予算内のより上のメニューが出ない）。
+// アイアン・プロテクトキーパーは鉄粉・サビ対策の専用メニューなので、
+// 「鉄粉・サビ汚れが気になる」を選んだ人だけ候補にする。
+// 予算に収まるメニューがない場合は、いちばん安いメニューにする（結果画面に予算超の案内が出る）。
 function getRecommendation() {
   var scores = calcScores();
   var size = state.selectedSize || 'M';
   var budget = state.answers.q4 || 999999;
+  var q3 = state.answers.q3 || [];
 
-  MENU_ORDER.forEach(function(key) {
-    var m = MENUS[key];
-    var price = m.prices[size];
-    var annual = calcAnnualCost(key, size);
-    if (price <= budget) {
-      scores[key] += 3;
-    } else if (annual <= budget) {
-      scores[key] -= 1;
-    } else {
-      scores[key] -= 5;
-    }
+  var candidates = MENU_ORDER.filter(function(key) {
+    return key !== 'iron' || q3.indexOf('iron_dust') !== -1;
   });
+  var byPrice = candidates.slice().sort(function(a, b) {
+    return MENUS[b].prices[size] - MENUS[a].prices[size];
+  });
+  var fits = byPrice.filter(function(key) { return MENUS[key].prices[size] <= budget; });
+  var primary = fits.length > 0 ? fits[0] : byPrice[byPrice.length - 1];
 
-  var sorted = MENU_ORDER.slice().sort(function(a, b) { return scores[b] - scores[a]; });
-
-  var hasBudgetFit = false;
-  for (var i = 0; i < sorted.length; i++) {
-    var m = MENUS[sorted[i]];
-    var p = m.prices[size];
-    var a = calcAnnualCost(sorted[i], size);
-    if (p <= budget || a <= budget) {
-      hasBudgetFit = true;
-      break;
-    }
-  }
-  if (!hasBudgetFit) {
-    sorted = MENU_ORDER.slice();
-  }
-
-  return { primary: sorted[0], order: sorted, scores: scores };
+  var order = [primary].concat(MENU_ORDER.filter(function(key) { return key !== primary; }));
+  return { primary: primary, order: order, scores: scores };
 }
 
 function getCarDisplayName() {
@@ -2366,12 +2355,16 @@ function shareResult() {
   QUESTIONS.q2.options.forEach(function(o) { if (o.value === state.answers.q2) q2Label = o.label; });
   var q3Labels = [];
   QUESTIONS.q3.options.forEach(function(o) { if ((state.answers.q3 || []).indexOf(o.value) !== -1) q3Labels.push(o.label); });
+  // ご予算も載せる（2026-10-28 藤原さんの要望。店側がLINEで受け取ったときに予算を把握できるように）
+  var q4Label = '';
+  QUESTIONS.q4.options.forEach(function(o) { if (o.value === state.answers.q4) q4Label = o.label; });
   var carName = getCarDisplayName();
 
   var text = '【コーティング診断結果】\n';
   text += 'お車: ' + carName + '（' + size + '）\n';
   text += '年式: ' + (q2Label || '-') + '\n';
   text += '気になること: ' + (q3Labels.join('・') || '-') + '\n';
+  text += 'ご予算: ' + (q4Label || '-') + '\n';
   text += 'おすすめ: 「' + menu.name + '」(' + menu.durationLabel + ')\n';
   text += '参考価格: ' + fmt(price) + '（年間' + fmt(annual) + '）';
 

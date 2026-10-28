@@ -7,7 +7,8 @@
 <meta property="og:description" content="4つの質問に答えるだけ。あなたの車にぴったりのコーティングがわかります。">
 <meta property="og:type" content="website">
 <title>コーティング診断 | GRAYCIA</title>
-<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAIKADAAQAAAABAAAAIAAAAACshmLzAAAEIklEQVRIDeVWWW/bRhDeXV4iZZ2UZVmyYjtNm6JB8pC2QH9831ugQJG2KNA0lx1HsiXX1kEdPPbot5IdRxJpOCj81IVADrnDOb75Zlb0h+++J/e52H0a17b/dw4oJfTzkv4Mbcr55OHXweOnEO5euTs7UEp4eWk7ihBeKBGF+53WbQ4UYzBEBadS4jdvHbhnJ96Hd/PWPpWCKLnc0mrZy8zaokKMnzzHx9ZoYI0HxmwqXM9+0yeKzPYO+VZRWnZSriaFsjLMyoufs9xkOoBja3iJMM1pEFfrYreNJKSdQ+xUqemDR4wnzkWfRZHMuVDLYnxmdojIvuyLfNE57xVe/m7MZ7AS1RqRv0OIYklc/OuF0+8iFfuir5iRhUSmA0KpORkrSsNGS1qW2z2GibhSjbYbQMk9PQEykAEUAIRyloN0iIAGyovogANqG9V2rPEQFpOyr6sy+CcplmftQ+nkkBnfKpnBCD5Sy2DsNVvrzpVKKrXgyyfCzdvj4dITrsqwzNnECobKshEwzxesYATHsV+ftw9BChBhM5U0iGDLNBGdZmESMcHxiJwY5DhkUQgBpVamhSuLI8oTYTvStFCb9VgJSYOIMef81Dk/i8t+tNMUOc+cToBVXCgmpSphzBwNQC38klJF5Nxcv+sdv6ISKaaUOs2BZolWBYui+i6oAn+wy728fXkOoBG10z91k6PIb8TVbc0iw1QpxnU+aRBd5alEvoAv0bpGOJ/vPiCEWqNLZAag5819dIDbfU+VvH1ypBV54YAKGe20gDjaKmwd8GIZr73Ose47vw52wi4Kox1slezhBVK8Cmz1lg7RQkehpwArZpw1HuXf/T09/Eq326KS3skb1CZs7IFL0PHev141e/OU6QDgFF7+xjgHSTT5lEI2ccVHtYlU1mgIgpJeB1wCf27p5EwHiIHFsW4fY6GjlNs5nu1/QaREV+ueWnYvHMfRlXwT942UDpwGVwho4aon82KZkxHywJFgDS6ut3TDL/PTQtpKyQDW40oNNQRBwUKcX6ApKgHwc72uMQt4uUrjCAxGf0AAx6TjIBhjNtlMZd0B4g23mzgXvZO3YE7w6BtDI0AwkTDynP4Z1yPIhRocYwSNn35b/PPX4PEzxUz/px9RkrU0NiCSEqHleh3EHtab0vXQDSgGL5RBR5xo8/bDXO8DKFT64xekqCjDyOJeAXQS3tbmtFjvg8XYpeHeAQJE4ojRmgS8WIIh8IcmMaBwO0dALGy08Sap+AJTC0tyFMxGeVYbgm7+ddQ1qNZ4Xp8kwJSKBDIOTuSOCYg3LJpDB70N0I04BM2MKdDXuwth5WxIcQBD+B6s+Djf0cw4eW7AXciaZiCxlsGf691P1RYfrBd5aeWj6avHjc/w/pPZeW19qb163Sjy6vZ/f7p3B/8C5LgxwDAjPcgAAAAASUVORK5CYII=">
+<link rel="icon" type="image/png" href="graycia_icon.png">
+<link rel="apple-touch-icon" href="graycia_icon.png">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -570,7 +571,9 @@ body {
   font-size: 11px;
   color: var(--text-dim);
   margin-top: 4px;
+  line-height: 1.4;
 }
+.size-btn-ex span { display: inline-block; }
 
 .q1-next, .q3-next {
   display: flex;
@@ -1378,7 +1381,7 @@ body {
   <div class="screen landing active" id="screen-landing">
     <div class="landing-header">
       <img class="landing-logo" src="pro.jpg" alt="キーパープロショップ">
-      <div class="landing-brand">GRAYCIA</div>
+      <img class="landing-logo" src="graycia_logo.jpg" alt="GRAYCIA">
     </div>
     <div class="landing-body">
     <div class="landing-headline">
@@ -1939,19 +1942,20 @@ function renderOptions(qId) {
 
 // === サイズ選択ボタンの描画 ===
 var SIZE_OPTIONS = [
-  { size: 'SS', label: '軽自動車',   icon: 'car_ss' },
-  { size: 'S',  label: 'コンパクト', icon: 'car_s'  },
-  { size: 'M',  label: 'セダン',     icon: 'car_m'  },
-  { size: 'L',  label: 'SUV',        icon: 'car_l'  },
-  { size: 'LL', label: 'ミニバン',   icon: 'car_ll' },
-  { size: 'XL', label: '大型車',     icon: 'car_xl' }
+  { size: 'SS', label: '小さめの軽自動車',             icon: 'car_ss' },
+  { size: 'S',  label: '軽・コンパクトカー',           icon: 'car_s'  },
+  { size: 'M',  label: '普通車・小型SUV',              icon: 'car_m'  },
+  { size: 'L',  label: '大きめの普通車・小型ミニバン', icon: 'car_l'  },
+  { size: 'LL', label: '大きめのミニバン・SUV',        icon: 'car_ll' },
+  { size: 'XL', label: '特大サイズの車',               icon: 'car_xl' }
 ];
 function renderSizeButtons() {
   var html = '';
   SIZE_OPTIONS.forEach(function(o) {
     html += '<div class="size-btn" onclick="selectSize(\'' + o.size + '\', this)">';
     html += '<div class="size-btn-size">' + o.size + '</div>';
-    html += '<div class="size-btn-ex">' + o.label + '</div>';
+    // 名前が長いので「の」「・」の後ろで折り返す（言葉の途中で切れないように）
+    html += '<div class="size-btn-ex"><span>' + o.label.replace(/(の|・)(?=..)/g, '$1</span><span>') + '</span></div>';
     html += '<div class="size-btn-car">' + ICONS[o.icon] + '</div>';
     html += '<div class="size-btn-check">' + CHECK_SVG + '</div>';
     html += '</div>';

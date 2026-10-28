@@ -9,6 +9,23 @@
 <title>コーティング診断 | GRAYCIA</title>
 <link rel="icon" type="image/png" href="graycia_icon.png">
 <link rel="apple-touch-icon" href="graycia_icon.png">
+<!-- Googleアナリティクス（アクセス解析）。本番のアドレスで開いたときだけ数える（手元の確認では数えない） -->
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+if (location.hostname === 'fujiwara-mira.github.io') {
+  var gaScript = document.createElement('script');
+  gaScript.async = true;
+  gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-31FFJBCWK2';
+  document.head.appendChild(gaScript);
+  gtag('js', new Date());
+  gtag('config', 'G-31FFJBCWK2');
+}
+// 診断の進み具合をアナリティクスに送る（イベント名は英数字のみ使える）
+function track(name, params) {
+  try { gtag('event', name, params || {}); } catch (e) {}
+}
+</script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -1127,6 +1144,12 @@ body {
   color: #ccc;
   margin-top: 4px;
 }
+.footer-note {
+  font-size: 9.5px;
+  color: #b3c0c7;
+  margin-top: 8px;
+  line-height: 1.5;
+}
 
 /* --- 結果画面のフローティング誘導 --- */
 /* 年間コストが見えたら下部に固定表示し、完了セクション到達で消える */
@@ -1412,6 +1435,7 @@ body {
     <div class="footer">
       <div class="footer-brand">GRAYCIA</div>
       <div class="footer-sub">KeePer PRO SHOP 浜松店</div>
+      <div class="footer-note">利用状況の把握のため、Googleアナリティクスを使用しています。</div>
     </div>
     </div>
   </div>
@@ -1767,6 +1791,7 @@ function startDiagnosis() {
   clearCar();
   document.querySelectorAll('#options-q3 .option').forEach(function(o) { o.classList.remove('selected'); });
   document.getElementById('q3Next').disabled = true;
+  track('diagnosis_start');
   showScreen('q1');
 }
 
@@ -1863,6 +1888,7 @@ function selectSize(size) {
 
 function goToQ2() {
   if (!state.selectedSize) return;
+  track('q1_done', { size: state.selectedSize, car: state.selectedCar || '(サイズを直接選択)' });
   showScreen('q2');
 }
 
@@ -1876,6 +1902,7 @@ function selectOption(qId, value) {
   event.currentTarget.classList.add('selected');
 
   var next = { q2: 'q3', q4: 'result' };
+  track(qId + '_done', qId === 'q2' ? { year: value } : { budget: value });
   setTimeout(function() {
     if (next[qId] === 'result') {
       renderResult();
@@ -1906,6 +1933,7 @@ function toggleQ3Option(value) {
 
 function goToQ4() {
   if (!state.answers.q3 || state.answers.q3.length === 0) return;
+  track('q3_done', { concerns: state.answers.q3.join(',') });
   showScreen('q4');
 }
 
@@ -2143,6 +2171,7 @@ function renderResult() {
   var annual = calcAnnualCost(rec.primary, size);
   var carName = getCarDisplayName();
   var html = '';
+  track('result_view', { menu: rec.primary, size: size, budget: state.answers.q4 });
 
   html += '<button class="btn-back" onclick="goBack(\'q4\')">';
   html += '<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>';
@@ -2276,7 +2305,7 @@ function renderResult() {
     html += '</div>';
   } else {
     html += '<div class="cta-buttons">';
-    html += '<a href="' + LINE_URL + '" target="_blank" rel="noopener" class="btn-primary btn-line" style="text-decoration:none">';
+    html += '<a href="' + LINE_URL + '" target="_blank" rel="noopener" class="btn-primary btn-line" style="text-decoration:none" onclick="track(\'line_click\')">';
     html += '<svg viewBox="0 0 24 24" fill="#fff"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>';
     html += 'LINEで相談・予約する</a>';
     html += '<button class="btn-outline" onclick="retake()">' + ICONS.refresh + '<span>もう一度診断する</span></button>';
@@ -2290,6 +2319,7 @@ function renderResult() {
   html += '<div class="footer">';
   html += '<div class="footer-brand">GRAYCIA</div>';
   html += '<div class="footer-sub">KeePer PRO SHOP 浜松店</div>';
+  html += '<div class="footer-note">利用状況の把握のため、Googleアナリティクスを使用しています。</div>';
   html += '</div>';
 
   document.getElementById('screen-result').innerHTML = html;
@@ -2349,6 +2379,7 @@ function retake() {
 }
 
 function shareResult() {
+  track('copy_result');
   var rec = getRecommendation();
   var menu = MENUS[rec.primary];
   var size = state.selectedSize || 'M';

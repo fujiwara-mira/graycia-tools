@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- LINE友だち限定の導線のため、検索結果に出さない -->
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#f4f8fb">
+<title>友だち登録特典 | GRAYCIA</title>
+<!-- 見出し用の丸ゴシック。見出しに使う文字だけを読み込む（text=）。文言を変えたら text= も更新する -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@800&display=swap&text=012EILN%E3%81%84%E3%81%8A%E3%81%8F%E3%81%95%E3%81%A0%E3%81%A1%E3%81%AA%E3%81%AB%E3%81%B3%E3%82%8B%E3%82%92%E3%82%A3%E3%82%B0%E3%82%B3%E3%83%86%E3%83%B3%E3%83%BC%E5%85%B8%E5%8F%8B%E5%A4%A7%E5%AE%9A%E6%96%AD%E6%B0%97%E7%89%B9%E7%99%BB%E8%A8%BA%E9%81%B8%E9%8C%B2%E9%99%90%EF%BC%8F%EF%BC%BC">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* 色は診断ツールと同じ。ここ以外で色を増やさない */
+:root {
+  --bg: #f4f8fb;
+  --bg-card: #ffffff;
+  --border: #d8e4e9;
+  --accent: #007f9f;
+  --accent-dark: #006b88;
+  --accent-light: #eaf6fa;
+  --text: #1f1f1f;
+  --text-sub: #566674;
+  --text-dim: #8a99a5;
+  --shadow-card: 0 4px 20px rgba(15, 39, 66, 0.06);
+  --shadow-raised: 0 10px 34px rgba(15, 39, 66, 0.10);
+  --round: 'M PLUS Rounded 1c', 'Hiragino Maru Gothic ProN', -apple-system, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+}
+
+html { background: var(--bg); }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
+  position: relative;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* 紙吹雪の飾り（読み上げ対象外・操作できない） */
+.deco {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+.deco i { position: absolute; display: block; }
+.deco .r { width: 10px; height: 18px; border-radius: 2px; }
+.deco .d { width: 11px; height: 11px; border-radius: 50%; }
+.deco .s {
+  width: 24px;
+  height: 24px;
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+}
+.deco .a  { background: var(--accent); }
+.deco .ad { background: var(--accent-dark); }
+.deco .b  { background: var(--border); }
+.deco .t  { background: var(--text-dim); opacity: 0.45; }
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 14px 16px 28px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo { height: 32px; width: auto; display: block; }
+.brand {
+  font-size: 15px;
+  letter-spacing: 0.24em;
+  color: var(--text-dim);
+  font-weight: 700;
+}
+
+.hero {
+  position: relative;
+  text-align: center;
+  padding: 18px 0 22px;
+}
+.bubble {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-family: var(--round);
+  font-weight: 800;
+  font-size: 13px;
+  color: #fff;
+  background: var(--accent);
+  border-radius: 999px;
+  padding: 5px 14px;
+  transform: rotate(-4deg);
+  box-shadow: 0 3px 0 var(--accent-dark);
+}
+.bubble span { display: inline; }
+.title {
+  font-family: var(--round);
+  font-weight: 800;
+  line-height: 1.12;
+  margin-top: 14px;
+  letter-spacing: 0.02em;
+}
+.title .t1 {
+  display: block;
+  font-size: clamp(26px, 8vw, 60px);
+  color: var(--text);
+}
+.title .t2 {
+  display: block;
+  font-size: clamp(54px, 18vw, 136px);
+  color: var(--accent);
+  text-shadow: 0 0.05em 0 var(--accent-light);
+}
+.sub {
+  font-size: 14px;
+  color: var(--text-sub);
+  margin-top: 12px;
+}
+
+.panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  box-shadow: var(--shadow-raised);
+  overflow: hidden;
+}
+.panel-head {
+  font-family: var(--round);
+  font-weight: 800;
+  font-size: clamp(13px, 4.3vw, 16px);
+  white-space: nowrap;
+  text-align: center;
+  color: #fff;
+  background: var(--accent);
+  padding: 10px 12px;
+  letter-spacing: 0.04em;
+}
+.cards {
+  display: grid;
+  gap: 14px;
+  padding: 16px;
+}
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: var(--accent-light);
+  border-radius: 18px;
+  padding: 18px 16px 16px;
+}
+.card-num {
+  font-family: var(--round);
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--accent);
+  line-height: 1;
+}
+.card-num b { font-size: 30px; margin-left: 2px; }
+.card-icon {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  display: grid;
+  place-items: center;
+  margin: 10px 0 10px;
+  color: var(--accent);
+}
+.card-icon svg { width: 40px; height: 40px; }
+.card-title {
+  font-family: var(--round);
+  font-weight: 800;
+  font-size: 21px;
+  line-height: 1.3;
+}
+.card-text {
+  font-size: 13.5px;
+  color: var(--text-sub);
+  margin-top: 6px;
+  text-wrap: pretty; /* 最終行に1〜2文字だけ残る折り返しを防ぐ（未対応のブラウザでは通常どおり） */
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 52px;
+  margin-top: 16px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  color: #fff;
+  background: var(--accent);
+  box-shadow: 0 4px 0 var(--accent-dark);
+}
+.btn:active { transform: translateY(2px); box-shadow: 0 2px 0 var(--accent-dark); }
+.btn svg { width: 18px; height: 18px; }
+.btn.is-disabled {
+  background: var(--border);
+  color: var(--text-sub);
+  box-shadow: none;
+  pointer-events: none;
+}
+.btn.is-disabled svg { display: none; }
+
+.footer {
+  text-align: center;
+  margin-top: 22px;
+}
+.footer-note { font-size: 12.5px; color: var(--text-sub); }
+.footer-brand {
+  margin-top: 12px;
+  font-size: 13px;
+  letter-spacing: 0.24em;
+  text-indent: 0.24em;
+  color: var(--text-dim);
+  font-weight: 700;
+}
+.footer-sub { font-size: 10.5px; color: var(--text-dim); }
+
+/* PC・タブレット: 2つの特典を横に並べ、画面いっぱいに大きく見せる */
+@media (min-width: 768px) {
+  .page { padding: 24px 40px 36px; }
+  .logo { height: 38px; }
+  .brand { font-size: 17px; }
+  .hero { padding: 20px 0 34px; }
+  .bubble { font-size: 16px; padding: 7px 18px; }
+  .sub { font-size: 16px; margin-top: 16px; }
+  .panel { border-radius: 28px; }
+  .panel-head { font-size: 20px; padding: 14px; }
+  .cards { grid-template-columns: 1fr 1fr; gap: 24px; padding: 28px; }
+  .card { padding: 28px 32px 28px; border-radius: 22px; }
+  .card-num { font-size: 16px; }
+  .card-num b { font-size: 38px; }
+  .card-icon { width: 112px; height: 112px; margin: 14px 0 14px; }
+  .card-icon svg { width: 56px; height: 56px; }
+  .card-title { font-size: 28px; }
+  .card-text { font-size: 15px; flex-grow: 1; }
+  .btn { min-height: 58px; font-size: 18px; margin-top: 22px; }
+  .footer { margin-top: 30px; }
+}
+
+/* 広いPC: 1画面にボタンまで収める。カードは「左にアイコン、右に説明」の横長にし、
+   「友だち限定」は吹き出しにして見出しの左に置く */
+@media (min-width: 1024px) {
+  .page { padding-top: 20px; }
+  .hero { padding: 6px 0 26px; }
+  .title .t1 { font-size: 52px; }
+  .title .t2 { font-size: 104px; }
+  .sub { margin-top: 10px; }
+  .card {
+    display: grid;
+    grid-template-columns: 112px 1fr;
+    column-gap: 28px;
+    align-items: center;
+    text-align: left;
+    padding: 28px 32px;
+  }
+  .card-icon {
+    grid-column: 1;
+    grid-row: 1 / span 4;
+    align-self: center;
+    margin: 0;
+  }
+  .card-num, .card-title, .card-text, .btn { grid-column: 2; }
+  .card-title { margin-top: 6px; }
+  .btn { margin-top: 18px; }
+
+  .bubble {
+    position: absolute;
+    left: 0;
+    top: 22px;
+    flex-direction: column;
+    justify-content: center;
+    width: 128px;
+    height: 128px;
+    border-radius: 50%;
+    padding: 0;
+    font-size: 20px;
+    line-height: 1.25;
+    transform: rotate(-10deg);
+    box-shadow: 0 6px 0 var(--accent-dark);
+  }
+  .bubble span { display: block; }
+  .title { margin-top: 0; }
+}
+</style>
+</head>
+<body>
+<div class="deco" aria-hidden="true">
+  <i class="r a"  style="top:3%;left:5%;transform:rotate(22deg)"></i>
+  <i class="d b"  style="top:9%;left:15%"></i>
+  <i class="s a"  style="top:14%;left:4%"></i>
+  <i class="r b"  style="top:21%;left:11%;transform:rotate(-35deg)"></i>
+  <i class="d ad" style="top:28%;left:3%"></i>
+  <i class="r t"  style="top:5%;left:30%;transform:rotate(60deg)"></i>
+  <i class="d a"  style="top:4%;left:68%"></i>
+  <i class="r ad" style="top:7%;left:86%;transform:rotate(-24deg)"></i>
+  <i class="s b"  style="top:13%;left:94%"></i>
+  <i class="d t"  style="top:17%;left:82%"></i>
+  <i class="r a"  style="top:24%;left:91%;transform:rotate(38deg)"></i>
+  <i class="s a"  style="top:30%;left:85%;width:16px;height:16px"></i>
+  <i class="r b"  style="top:44%;left:1.5%;transform:rotate(15deg)"></i>
+  <i class="d a"  style="top:58%;left:2.5%"></i>
+  <i class="r a"  style="top:50%;left:97%;transform:rotate(-30deg)"></i>
+  <i class="d b"  style="top:66%;left:96%"></i>
+  <i class="s ad" style="top:82%;left:2%;width:18px;height:18px"></i>
+  <i class="r t"  style="top:90%;left:95%;transform:rotate(20deg)"></i>
+</div>
+
+<main class="page">
+  <div class="top">
+    <img class="logo" src="pro.jpg" alt="キーパープロショップ">
+    <span class="brand">GRAYCIA</span>
+  </div>
+
+  <section class="hero">
+    <p class="bubble"><span>LINE</span><span>友だち</span><span>限定</span></p>
+    <h1 class="title">
+      <span class="t1">LINE友だち</span>
+      <span class="t2">登録特典</span>
+    </h1>
+    <p class="sub">友だち登録ありがとうございます。</p>
+  </section>
+
+  <section class="panel" aria-labelledby="panel-head">
+    <h2 class="panel-head" id="panel-head">＼ 気になる特典をお選びください ／</h2>
+    <div class="cards">
+      <article class="card">
+        <p class="card-num">特典<b>1</b></p>
+        <div class="card-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4V3h6v1"/><path d="m8.5 10 1.5 1.5 2.5-2.5"/><path d="M14.5 10.5H16"/><path d="m8.5 15.5 1.5 1.5 2.5-2.5"/><path d="M14.5 16H16"/></svg>
+        </div>
+        <h3 class="card-title">コーティング診断</h3>
+        <p class="card-text">かんたんな質問に答えるだけで、お車に合うコーティングと費用の目安がわかります。</p>
+        <!-- ?from=line は診断結果の「LINEで相談」ボタンを隠す印（友だち登録済みの人向けのため） -->
+        <a class="btn" href="shindan.html?from=line">
+          <span>診断をはじめる</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5.5 16 12 9.5 18.5"/></svg>
+        </a>
+      </article>
+
+      <article class="card">
+        <p class="card-num">特典<b>2</b></p>
+        <div class="card-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="8.5" width="17" height="4" rx="1"/><path d="M5 12.5v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/><path d="M12 8.5v12"/><path d="M12 8.5C10.8 5.9 8.4 4.5 7 5.7c-1.3 1.1.2 2.8 5 2.8z"/><path d="M12 8.5c1.2-2.6 3.6-4 5-2.8 1.3 1.1-.2 2.8-5 2.8z"/></svg>
+        </div>
+        <h3 class="card-title">10大特典</h3>
+        <p class="card-text">友だち登録いただいた方だけの特典をまとめています。</p>
+        <a class="btn" id="tokuten10" href="#">
+          <span>特典を見る</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 5.5 16 12 9.5 18.5"/></svg>
+        </a>
+      </article>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p class="footer-note">ご予約・ご相談は、LINEのトーク画面からお気軽にどうぞ。</p>
+    <div class="footer-brand">GRAYCIA</div>
+    <div class="footer-sub">KeePer PRO SHOP 浜松店</div>
+  </footer>
+</main>
+
+<script>
+// 10大特典ページのURL。リンク先が変わったときはここだけ書き換える。
+// 空のあいだはボタンを「準備中」にして、切れたリンクへ飛ばさない。
+// 2026-10-01: WordPressのプレビュー用URL（記事は未公開の下書き）。期限が来ると開けなくなるため、
+// noteへの移行か記事の公開で正式なURLが決まったら差し替える
+var TOKUTEN10_URL = 'https://new-car-life.com/?p=1989&preview=1&_ppp=66dfe9e959';
+
+(function () {
+  var btn = document.getElementById('tokuten10');
+  if (TOKUTEN10_URL) {
+    btn.href = TOKUTEN10_URL;
+  } else {
+    btn.classList.add('is-disabled');
+    btn.removeAttribute('href');
+    btn.querySelector('span').textContent = '準備中です';
+  }
+})();
+</script>
+</body>
+</html>
